@@ -1,0 +1,220 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Clawdeen — Votre bot WhatsApp, dans ta poche</title>
+<meta name="description" content="Clawdeen fait tourner votre bot WhatsApp sur votre téléphone Android : commandes, gestion de groupes, outils premium. Téléchargez l’APK.">
+<meta name="theme-color" content="#05060d">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 120'%3E%3Cpath d='M16 8 46 30H74L104 8 102 52 114 64 90 82 84 94 60 112 36 94 30 82 6 64 18 52Z' fill='%2322f3ff' fill-opacity='.15' stroke='%2322f3ff' stroke-width='6' stroke-linejoin='round'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Figtree:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#05060d; --surface:#0b0e1c; --surface-2:#11162b; --line:#1d2549;
+  --text:#e6f1ff; --muted:#8f9bc2; --cyan:#22f3ff; --violet:#b45cff; --ok:#39ff9c; --ink:#02060d;
+  --display:'Bricolage Grotesque','Trebuchet MS',system-ui,sans-serif;
+  --body:'Figtree',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;
+  color-scheme:dark;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{scroll-behavior:smooth}
+body{margin:0;background:
+  radial-gradient(900px 480px at 88% -8%,rgba(180,92,255,.22),transparent 70%),
+  radial-gradient(720px 420px at -10% 12%,rgba(34,243,255,.14),transparent 70%),var(--bg);
+  color:var(--text);font:17px/1.55 var(--body);min-height:100vh}
+a{color:inherit}
+.wrap{width:min(1080px,100% - 40px);margin-inline:auto}
+:focus-visible{outline:3px solid var(--cyan);outline-offset:3px;border-radius:8px}
+
+header.bar{display:flex;align-items:center;justify-content:space-between;padding:18px 0}
+.brand{display:flex;align-items:center;gap:10px;font:800 21px var(--display);letter-spacing:.2px;text-decoration:none}
+.brand svg{width:30px;height:30px}
+.bar nav a{color:var(--muted);text-decoration:none;font-weight:500;margin-left:20px}
+.bar nav a:hover{color:var(--text)}
+
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;min-height:52px;padding:0 26px;border-radius:14px;border:1px solid var(--line);
+  background:var(--surface-2);color:var(--text);font:600 17px var(--body);text-decoration:none;cursor:pointer}
+.btn.primary{background:linear-gradient(135deg,var(--cyan),#6fb6ff 55%,var(--violet));color:var(--ink);border:0;box-shadow:0 0 28px rgba(34,243,255,.35)}
+.btn:hover{filter:brightness(1.08)}
+
+/* Héros */
+.hero{display:grid;gap:44px;padding:34px 0 70px;align-items:center}
+@media(min-width:880px){.hero{grid-template-columns:1.1fr .9fr;padding:64px 0 96px}}
+h1{font:800 clamp(38px,7.4vw,70px)/1.02 var(--display);letter-spacing:-1.2px;margin:0 0 20px}
+.lead{color:var(--muted);font-size:19px;max-width:34em;margin:0 0 30px}
+.cta{display:flex;flex-wrap:wrap;gap:12px}
+.fine{color:var(--muted);font-size:14px;margin-top:14px}
+
+/* Téléphone + notification : l'élément mémorable */
+.phone{justify-self:center;width:min(310px,100%);border:1px solid var(--line);border-radius:38px;padding:14px;
+  background:linear-gradient(180deg,#0c1124,#070913);box-shadow:0 30px 80px rgba(0,0,0,.55),0 0 60px rgba(180,92,255,.18)}
+.screen{border-radius:28px;background:#05070f;padding:20px 14px 22px;min-height:420px;display:flex;flex-direction:column;gap:12px}
+.clock{font:700 44px var(--display);text-align:center;margin:18px 0 8px}
+.date{color:var(--muted);text-align:center;margin:-6px 0 18px;font-size:14px}
+.notif{display:flex;gap:12px;align-items:center;background:#161c35;border:1px solid #232c55;border-radius:20px;padding:13px 14px}
+.notif .ico{flex:none;width:38px;height:38px;border-radius:12px;background:#05060d;display:grid;place-items:center;border:1px solid var(--line)}
+.notif .ico svg{width:24px;height:24px}
+.notif b{display:block;font-size:15px}
+.notif span{color:#aab4d8;font-size:14px}
+.notif .live{margin-left:auto;width:9px;height:9px;border-radius:50%;background:var(--ok);box-shadow:0 0 10px var(--ok)}
+.msg{align-self:flex-start;background:#161c35;border-radius:16px 16px 16px 4px;padding:9px 13px;font-size:14px;max-width:85%}
+.msg.me{align-self:flex-end;background:#12363c;border-radius:16px 16px 4px 16px}
+@media(prefers-reduced-motion:no-preference){
+  .notif{animation:drop .9s .35s cubic-bezier(.2,.9,.3,1) both}
+  @keyframes drop{from{opacity:0;transform:translateY(-18px)}to{opacity:1;transform:none}}
+}
+
+/* Sections */
+section{padding:56px 0}
+h2{font:800 clamp(28px,4.6vw,42px)/1.1 var(--display);letter-spacing:-.6px;margin:0 0 12px}
+.sub{color:var(--muted);margin:0 0 34px;max-width:38em}
+.features{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(240px,1fr))}
+.feat{border:1px solid var(--line);border-radius:18px;padding:20px;background:var(--surface)}
+.feat h3{margin:0 0 6px;font:700 19px var(--display)}
+.feat p{margin:0;color:var(--muted);font-size:15.5px}
+
+.steps{counter-reset:s;display:grid;gap:12px;padding:0;margin:0;list-style:none;max-width:640px}
+.steps li{counter-increment:s;display:flex;gap:16px;align-items:flex-start;padding:16px 18px;border:1px solid var(--line);border-radius:16px;background:var(--surface)}
+.steps li::before{content:counter(s);flex:none;width:34px;height:34px;border-radius:50%;display:grid;place-items:center;font:800 16px var(--display);color:var(--ink);background:linear-gradient(135deg,var(--cyan),var(--violet))}
+.steps b{display:block}.steps span{color:var(--muted);font-size:15.5px}
+
+.packs{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(230px,1fr))}
+.pack{border:1px solid var(--line);border-radius:20px;padding:22px;background:var(--surface);display:flex;flex-direction:column;gap:8px}
+.pack.best{border-color:rgba(34,243,255,.55);box-shadow:0 0 30px rgba(34,243,255,.12)}
+.pack small{color:var(--cyan);font-weight:600}
+.pack h3{margin:0;font:700 22px var(--display)}
+.pack .price{font:800 32px var(--display);margin:4px 0}
+.pack .price i{font:500 15px var(--body);color:var(--muted);font-style:normal}
+.pack p{margin:0;color:var(--muted);font-size:15px}
+
+.faq details{border:1px solid var(--line);border-radius:14px;background:var(--surface);padding:14px 18px;margin-bottom:10px}
+.faq summary{cursor:pointer;font-weight:600}
+.faq p{color:var(--muted);margin:10px 0 0;font-size:15.5px}
+
+.final{text-align:center;border:1px solid var(--line);border-radius:26px;padding:48px 22px;margin:20px 0 40px;
+  background:radial-gradient(500px 220px at 50% 0,rgba(34,243,255,.14),transparent 70%),var(--surface)}
+.final .cta{justify-content:center}
+footer{color:var(--muted);font-size:14px;padding:0 0 40px;text-align:center}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="bar">
+    <a class="brand" href="#">
+      <svg viewBox="0 0 120 120" fill="none" aria-hidden="true"><defs><linearGradient id="g" x1="14" y1="6" x2="106" y2="114" gradientUnits="userSpaceOnUse"><stop stop-color="#22f3ff"/><stop offset="1" stop-color="#b45cff"/></linearGradient></defs><path d="M16 8 46 30H74L104 8 102 52 114 64 90 82 84 94 60 112 36 94 30 82 6 64 18 52Z" fill="#22f3ff" fill-opacity=".08" stroke="url(#g)" stroke-width="5" stroke-linejoin="round"/></svg>
+      Clawdeen
+    </a>
+    <nav><a href="#offres">Offres</a><a href="#installer">Installer</a><a href="#faq">Questions</a></nav>
+  </header>
+
+  <main>
+    <div class="hero">
+      <div>
+        <h1>Votre bot WhatsApp travaille, même quand vous dormez.</h1>
+        <p class="lead">Clawdeen fait tourner votre bot directement sur votre téléphone Android. Pas de serveur à louer, pas de code à écrire : vous liez votre WhatsApp et vos commandes sont prêtes.</p>
+        <div class="cta">
+          <a class="btn primary" data-apk href="#">Télécharger l’APK</a>
+          <a class="btn" href="#offres">Voir les offres</a>
+        </div>
+        <p class="fine">Android 7 ou plus récent · Gratuit pour commencer · Version <span data-version>1.0</span></p>
+      </div>
+
+      <div class="phone" aria-label="Aperçu de l’application">
+        <div class="screen">
+          <div class="clock">22:36</div>
+          <div class="date">samedi 14 novembre</div>
+          <div class="notif">
+            <div class="ico"><svg viewBox="0 0 120 120" fill="none"><path d="M16 8 46 30H74L104 8 102 52 114 64 90 82 84 94 60 112 36 94 30 82 6 64 18 52Z" stroke="#22f3ff" stroke-width="7" stroke-linejoin="round"/></svg></div>
+            <div><b>Clawdeen</b><span>Votre bot WhatsApp est actif</span></div>
+            <i class="live"></i>
+          </div>
+          <div class="msg me">.menu</div>
+          <div class="msg">Voici vos commandes : stickers, anti-lien, rappels, traduction…</div>
+        </div>
+      </div>
+    </div>
+
+    <section>
+      <h2>Tout ce qu’il faut pour animer vos discussions</h2>
+      <p class="sub">Des commandes prêtes à l’emploi, et des outils premium à activer quand vous en avez besoin.</p>
+      <div class="features">
+        <div class="feat"><h3>Gestion de groupes</h3><p>Anti-lien, messages de bienvenue, verrouillage horaire, diffusion dans tous vos groupes.</p></div>
+        <div class="feat"><h3>Stickers et médias</h3><p>Créez des stickers, téléchargez des vidéos et des audios, lisez le texte d’une image.</p></div>
+        <div class="feat"><h3>Assistant IA</h3><p>Posez vos questions à l’IA sans quitter WhatsApp. La clé reste protégée côté serveur.</p></div>
+        <div class="feat"><h3>Outils du quotidien</h3><p>Traduction, météo, calculs, sondages, rappels programmés, raccourcisseur de liens.</p></div>
+        <div class="feat"><h3>Toujours en ligne</h3><p>Une notification discrète indique que le bot tourne, même écran éteint.</p></div>
+        <div class="feat"><h3>Vos données chez vous</h3><p>Le bot s’exécute sur votre téléphone. Votre session WhatsApp n’est jamais sauvegardée dans le cloud.</p></div>
+      </div>
+    </section>
+
+    <section id="installer">
+      <h2>Prêt en quatre étapes</h2>
+      <p class="sub">Comptez cinq minutes.</p>
+      <ol class="steps">
+        <li><div><b>Téléchargez l’APK</b><span>Touchez « Télécharger l’APK » depuis votre téléphone Android.</span></div></li>
+        <li><div><b>Autorisez l’installation</b><span>Android vous demande d’autoriser l’installation depuis ce navigateur : acceptez, puis ouvrez le fichier.</span></div></li>
+        <li><div><b>Créez votre compte</b><span>Une adresse e-mail et un mot de passe suffisent.</span></div></li>
+        <li><div><b>Liez votre WhatsApp</b><span>Avec un code de jumelage ou un QR code. Puis écrivez <code>.menu</code> dans WhatsApp.</span></div></li>
+      </ol>
+    </section>
+
+    <section id="offres">
+      <h2>Des offres mensuelles, payées en gourdes</h2>
+      <p class="sub">Le paiement est vérifié à la main par notre support, sur WhatsApp. L’accès s’active dès la confirmation.</p>
+      <div class="packs">
+        <div class="pack"><small>Pour commencer</small><h3>Essentiel</h3><div class="price">200 <i>HTG / mois</i></div><p>Fancy Text, Whois, mode silencieux, rappels.</p></div>
+        <div class="pack best"><small>Le plus polyvalent</small><h3>Créateur</h3><div class="price">500 <i>HTG / mois</i></div><p>Fancy Text, IA, Status Downloader, Play.</p></div>
+        <div class="pack"><small>Pour les admins</small><h3>Gestion de groupes</h3><div class="price">750 <i>HTG / mois</i></div><p>Protections avancées, verrouillage horaire, anti-suppression, kickall, diffusion.</p></div>
+        <div class="pack"><small>Tous les outils</small><h3>Complet</h3><div class="price">900 <i>HTG / mois</i></div><p>Les 18 modules premium dans une seule offre.</p></div>
+      </div>
+    </section>
+
+    <section id="faq" class="faq">
+      <h2>Questions fréquentes</h2>
+      <p class="sub">&nbsp;</p>
+      <details><summary>Mon téléphone doit-il rester allumé ?</summary><p>Oui : le bot tourne sur votre téléphone. Autorisez Clawdeen à rester actif en arrière-plan et gardez une connexion internet.</p></details>
+      <details><summary>Mon numéro risque-t-il d’être bloqué par WhatsApp ?</summary><p>Comme pour tout bot, évitez les envois en masse et le spam. Utilisez-le avec modération pour protéger votre numéro.</p></details>
+      <details><summary>Comment payer ?</summary><p>Choisissez un pack dans la boutique de l’application, puis envoyez votre référence de commande au support WhatsApp. Il confirme votre paiement et active vos modules.</p></details>
+      <details><summary>Sur combien d’appareils fonctionne mon abonnement ?</summary><p>Jusqu’à deux appareils par compte. Vous pouvez en retirer un depuis la boutique pour libérer une place.</p></details>
+    </section>
+
+    <div class="final">
+      <h2>Lancez votre bot ce soir.</h2>
+      <p class="sub" style="margin-inline:auto">Téléchargez Clawdeen et liez votre WhatsApp en quelques minutes.</p>
+      <div class="cta">
+        <a class="btn primary" data-apk href="#">Télécharger l’APK</a>
+        <a class="btn" data-channel href="#" hidden>Rejoindre la chaîne</a>
+        <a class="btn" data-support href="#">Parler au support</a>
+      </div>
+    </div>
+  </main>
+
+  <footer>© <span id="y"></span> Clawdeen · par Cled, D4C Studio</footer>
+</div>
+
+<script>
+// ── À MODIFIER : les 4 seuls réglages de cette page ───────────────────────────
+const CONFIG = {
+  // Lien direct vers l'APK. Avec GitHub : créez une « Release », joignez-y l'APK renommé clawdeen.apk,
+  // puis remplacez VOTRE-COMPTE par votre nom d'utilisateur GitHub.
+  apkUrl: "https://github.com/clawdeen-md/clawdeen-releases/releases/latest/download/clawdeen.apk",
+  supportWhatsapp: "50942818561",   // numéro du support, format international, sans +
+  channelUrl: "https://whatsapp.com/channel/0029VbEC0e342DccCh9B6t0n",                    // lien de la chaîne WhatsApp (laisser vide pour masquer le bouton)
+  version: "1.0"
+};
+// ─────────────────────────────────────────────────────────────────────────────
+document.querySelectorAll('[data-apk]').forEach(a => a.href = CONFIG.apkUrl);
+document.querySelectorAll('[data-support]').forEach(a => {
+  a.href = 'https://wa.me/' + CONFIG.supportWhatsapp + '?text=' + encodeURIComponent('Bonjour, j’ai une question sur Clawdeen.');
+  a.target = '_blank'; a.rel = 'noopener';
+});
+document.querySelectorAll('[data-channel]').forEach(a => {
+  if (CONFIG.channelUrl) { a.href = CONFIG.channelUrl; a.hidden = false; a.target = '_blank'; a.rel = 'noopener'; }
+});
+document.querySelector('[data-version]').textContent = CONFIG.version;
+document.getElementById('y').textContent = new Date().getFullYear();
+</script>
+</body>
+</html>
